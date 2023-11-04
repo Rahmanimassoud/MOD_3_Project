@@ -26,7 +26,7 @@ const Navbar = () => {
                     <Link to='/signIn'>
                         <li className='sm:inline hover:underline'>Sign In</li>
                     </Link>
-                    <Link to='/signOut'>
+                    <Link to='/signUp'>
                         <li className='sm:inline hover:underline'>SignUp</li>  
                     </Link>
                 </ul>
