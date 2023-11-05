@@ -6,6 +6,7 @@ import SignIn from './pages/SignIn/SignIn';
 import SignUp from './pages/SignUp/SignUp';
 import About from './pages/About/About';
 import Profile from './pages/Profile/Profile';
+import Private from './components/Private/Private';
 
 
 const App = () => {
@@ -20,7 +21,10 @@ const App = () => {
             <Route path='/signIn' element={<SignIn/>}/>
             <Route path='/signUp' element={<SignUp/>}/>
             <Route path='/about' element={<About/>}/>
-            <Route path='/profile' element={<Profile/>}/>
+
+            <Route element={<Private/>}>
+                <Route path='/profile' element={<Profile/>}/>
+            </Route>
         </Routes>
         </div>
     )
