@@ -28,6 +28,7 @@ const SignUp = () => {
         e.preventDefault();
         try {
           const response = await axios.post('/server/signUp', formData);
+          
           if (response.status >= 200 && response.status < 300) {
             console.log('User registered successfully:', response.data);
           } else {
