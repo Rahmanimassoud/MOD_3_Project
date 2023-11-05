@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import { useEffect, useRef, useState } from 'react';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
-import { updateUserSuccess, updateUserFailuer, updateUserStart, deleteUserFailuer, deleteUserStart, deleteUserSuccess } from '../../redux/user/userSlice';
+import { updateUserSuccess, updateUserFailuer, updateUserStart, deleteUserFailuer, deleteUserStart, deleteUserSuccess, logOutUserStart, logOutUserFailuer, logOuteUserSuccess } from '../../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { app } from '../../firebase';
 import axios from 'axios';
@@ -104,11 +104,30 @@ const Profile = () => {
                 return;
             }
             dispatch(deleteUserSuccess(data));
-
-
         } catch(err) {
             console.log(err);
             dispatch(deleteUserFailuer(err.message))
+        }
+    }
+
+    const handleSignOut = async () => {
+        try{
+            dispatch(logOutUserStart())
+            const res = await axios({
+                method: "GET",
+                url: '/server/signout'
+            })
+            const data = res.data;
+            if(data.success === false) {
+                dispatch(logOutUserFailuer(data.message))
+                return;
+            }
+            dispatch(logOuteUserSuccess(data));
+
+
+        } catch(error) {
+            console.log(error);
+            dispatch(logOutUserFailuer(error.message))
         }
 
     }
@@ -163,7 +182,8 @@ const Profile = () => {
             <div className='flex justify-between mt-3'>
                 <button onClick={handleUserDelete}
                 className='text-red-700 border rounded-lg p-3 cursor-pointer'>Delete Account</button>
-                <button className='text-slate-500 border rounded-lg p-3 cursor-pointer'>Sign Out</button>
+                <button onClick={handleSignOut}
+                className='text-slate-500 border rounded-lg p-3 cursor-pointer'>Sign Out</button>
             </div>
         </div>
     )

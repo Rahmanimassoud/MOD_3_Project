@@ -28,6 +28,20 @@ app.use(cookieParser());
 
 // USER ROUTES===========
 
+
+// sign out route
+
+app.get("/signout", (req, res) => {
+
+    try {
+        res.clearCookie('access_token');
+        res.status(200).send("User has been logged out")
+
+    } catch(error) {
+        console.log(error);
+    }
+})
+
 // delete route
 app.delete("/delete/:id", verifyToken, async(req, res) => {
     if(req.user.id !== req.params.id) return res.status(401).json("Your not allowed to delete this account")
