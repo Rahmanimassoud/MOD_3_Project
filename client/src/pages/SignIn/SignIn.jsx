@@ -13,7 +13,6 @@ const SignIn = () => {
         email: '',
         password: ''
     });
-    // const {loading, error} = useSelector((state) => state.user)  //new line
 
     const navigate = useNavigate();
     const dispatch = useDispatch();   //new line
@@ -55,14 +54,6 @@ const SignIn = () => {
         <div className="p-3 max-w-lg mx-auto">
             <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-{/* 
-                <input type="text" placeholder="username"
-                className="border p-3 rounded-lg"
-                id="userName"
-                name='userName'
-                value={formData.userName}
-                onChange={handleChange}/> */}
-
                 <input type="email" placeholder="email"
                 className="border p-3 rounded-lg" 
                 id="email"
@@ -77,11 +68,11 @@ const SignIn = () => {
                 value={formData.password}
                 onChange={handleChange}/>
 
-                <button className="bg-slate-500 text-white font-semibold border rounded-lg p-3 uppercase hover:bg-opacity-80 disabled:opacity-80">Sign up</button>
+                <button className="bg-slate-500 text-white font-semibold border rounded-lg p-3 uppercase hover:bg-opacity-80 disabled:opacity-80">Sign In</button>
                 <OAuth/>
             </form>
             <div className='flex gap-2 mt-5'>
-                <p>Dont an account?</p>
+                <p>Dont have an account?</p>
                 <Link to={'/signUp'}>
                     <span className='text-blue-700'>Sign Up</span>
                 </Link>

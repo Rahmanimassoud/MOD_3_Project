@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux'
 import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { updateUserSuccess, updateUserFailuer, updateUserStart, deleteUserFailuer, deleteUserStart, deleteUserSuccess, logOutUserStart, logOutUserFailuer, logOuteUserSuccess } from '../../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
@@ -122,9 +123,7 @@ const Profile = () => {
                 dispatch(logOutUserFailuer(data.message))
                 return;
             }
-            dispatch(logOuteUserSuccess(data));
-
-
+            dispatch(logOuteUserSuccess(data))
         } catch(error) {
             console.log(error);
             dispatch(logOutUserFailuer(error.message))
@@ -177,6 +176,9 @@ const Profile = () => {
                 onChange={handleChange}
                 />
                 <button className="bg-slate-500 text-white font-semibold border rounded-lg p-3 uppercase hover:bg-opacity-80 disabled:opacity-80">Update</button>
+                <Link className='bg-green-300 text-white font-semibold border rounded-lg p-3 uppercase hover:bg-opacity-80 disabled:opacity-80 text-center' to={"/create-listing"}>
+                    List a Property
+                </Link>
 
             </form>
             <div className='flex justify-between mt-3'>

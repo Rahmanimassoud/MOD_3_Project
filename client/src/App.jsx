@@ -7,11 +7,11 @@ import SignUp from './pages/SignUp/SignUp';
 import About from './pages/About/About';
 import Profile from './pages/Profile/Profile';
 import Private from './components/Private/Private';
+import CreateListing from './pages/CreateListing/CreateListing';
+
 
 
 const App = () => {
-
-
 
     return (
         <div>
@@ -24,6 +24,7 @@ const App = () => {
 
             <Route element={<Private/>}>
                 <Route path='/profile' element={<Profile/>}/>
+                <Route path='/create-listing' element={<CreateListing/>}/>
             </Route>
         </Routes>
         </div>

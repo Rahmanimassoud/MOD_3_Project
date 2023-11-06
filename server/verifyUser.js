@@ -11,8 +11,8 @@ const jwt = require('jsonwebtoken');
     }
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
         if(err){
-            console.error("JWT VRIFI ERORRR", err)
-            return res.status(403).json("not allowed")
+            console.error("JWT VRIFIY ERORRR", err)
+            return res.status(403).json("not allowed, coming from verifyUser.js")
         }
         req.user = user;
         next();
