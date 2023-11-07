@@ -104,13 +104,12 @@ app.post("/google", async (req, res)=> {
             const {password: pass, ...rest} = newUser._doc
             res.cookie('access_token', token, {httpOnly: true}).status(200).send(rest);
         }
-
     } catch (error){
         next(error);
     }
 })
 // =================================
-// update Route
+// update Route For User
 app.post("/update/:id", verifyToken, async(req, res, next) => {
     if(req.user.id !== req.params.id) return res.status(401).json("Your not allowed")
 
@@ -152,20 +151,39 @@ app.delete("/delete/:id", verifyToken, async(req, res) => {
 // =====================================LISTING ROUTES================================
 
 
-app.post('/listing/create', verifyToken, async (req, res) => {
 
+// Create a Listing
+app.post('/listing/create', verifyToken, async (req, res) => {
+    
     try{
         const listing  = await Listing.create(req.body);
         res.status(201).send(listing)
-
-
     } catch (error) {
-        res.status(404).send("Error Listing", error)
+        res.status(404).send("Error Listing " + error.message);
     }
-
+    
 })
 
 
+// Get Listings of Each User
+app.get('/listing/:id', verifyToken, async (req, res)=> {
+    if(req.user.id === req.params.id) {
+        try{
+            const Listings = await Listing.find({userRef: req.params.id});
+            res.status(201).send(Listings)
+            // console.log(Listings, "this is listings from index.js");
+
+        } catch (err){
+            // next(err) //might need to change just to send the error not use next
+            res.status(404).send("Error Listing " + err.message)
+        }
+
+    } else {
+        return res.status(401).json("You can only view your own listing") //if didnt worked remove the next like the delete function
+
+    }
+
+})
 
 
 

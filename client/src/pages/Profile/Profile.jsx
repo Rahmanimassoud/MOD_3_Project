@@ -22,7 +22,12 @@ const Profile = () => {
     })
     console.log(formData);
 
+    const [showListingError, setShowListingError] = useState(false)
+    const [userListings, setUsersListings] = useState([])
+    console.log(userListings, "this is the user listing state");
+
     const dispatch = useDispatch(); 
+
 
     useEffect(()=> {
         if(file) {
@@ -61,6 +66,7 @@ const Profile = () => {
     const handleChange = (e)=> {
         setFormData({...formData, [e.target.id]: e.target.value})
     }
+    console.log(formData, "this is form data from handle change");
 
     // console.log(currentUser);
 
@@ -128,6 +134,27 @@ const Profile = () => {
             console.log(error);
             dispatch(logOutUserFailuer(error.message))
         }
+    }
+
+    const handleShowListing = async () => {
+
+        try {
+            setShowListingError(false)
+            const res = await axios({
+                method: "GET",
+                url: `/server/listing/${currentUser._id}`
+            })
+            const data = await res.data; 
+            if(data.success === false){
+                setShowListingError(true)
+                return;
+            }
+            setUsersListings(data)
+
+        } catch (error) {
+            setShowListingError(true)
+
+        }
 
     }
 
@@ -176,6 +203,7 @@ const Profile = () => {
                 onChange={handleChange}
                 />
                 <button className="bg-slate-500 text-white font-semibold border rounded-lg p-3 uppercase hover:bg-opacity-80 disabled:opacity-80">Update</button>
+            {/* Add a success message while the user is updated or show error  */}
                 <Link className='bg-green-300 text-white font-semibold border rounded-lg p-3 uppercase hover:bg-opacity-80 disabled:opacity-80 text-center' to={"/create-listing"}>
                     List a Property
                 </Link>
@@ -184,9 +212,45 @@ const Profile = () => {
             <div className='flex justify-between mt-3'>
                 <button onClick={handleUserDelete}
                 className='text-red-700 border rounded-lg p-3 cursor-pointer'>Delete Account</button>
+
+                <button onClick={handleShowListing} className='text-slate-500 border rounded-lg p-3 cursor-pointer'>Show Listings</button>
+                {/* Bring Show Listing button here */}
                 <button onClick={handleSignOut}
                 className='text-slate-500 border rounded-lg p-3 cursor-pointer'>Sign Out</button>
             </div>
+            {/* Show Listing Section */}
+            <p className='text-red-700 mt-5'>{showListingError ? "Error Showing Listing" : ''}</p>
+
+            {userListings && 
+            userListings.length > 0 &&
+                <div className='flex flex-col gap-4'>
+                    {/* Not Showing the loged in user's name */}
+                    <h1 className='text-center font-bold my-7 text-2xl'>{currentUser.name} Listings</h1>
+                {userListings.map((listing) => <div key={listing._id} className='flex justify-between border rounded-md p-3 items-center gap-2'>
+                    <Link to={`/listing/${listing._id}`}>
+                        {/* this is not displaying the image it shows the array empty */}
+                        <img src={listing.imageUrl} alt="cover" className='h-16 w-18 object-contain rounded-lg'/>
+                    </Link>
+
+                    <Link  to={`/listing/${listing._id}`}>
+                        <p className='text-slate-800 font-semibold flex-1 hover:uppercase truncate'>{listing.name}</p>
+                    </Link>
+                    <div className='flex gap-3'>
+                        <button className='text-red-400 border rounded-lg p-3 cursor-pointer hover:shadow-lg uppercase'>Delete</button>
+                        <button className='text-green-300 border rounded-lg p-3 cursor-pointer hover:shadow-lg uppercase'>Edit</button>
+                    </div>
+
+
+                </div>)}
+
+            </div>}
+
+
+
+
+
+
+
         </div>
     )
 };
