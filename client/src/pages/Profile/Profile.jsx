@@ -13,18 +13,18 @@ const Profile = () => {
     const {currentUser} = useSelector(state => state.user)
     const fileRef = useRef(null)
     const [file, setFile] = useState(undefined);
-    console.log(file, "this is file");
+    // console.log(file, "this is file");
     const [imageLoading, setImageLoading] = useState(0)
-    console.log(imageLoading);
+    // console.log(imageLoading);
     const [fileError, setFileError] = useState(false)
-    console.log(fileError, 'this the file errorr');
+    // console.log(fileError, 'this the file errorr');
     const [formData, setFormData] = useState({
     })
-    console.log(formData);
+    // console.log(formData);
 
     const [showListingError, setShowListingError] = useState(false)
     const [userListings, setUsersListings] = useState([])
-    console.log(userListings, "this is the user listing state");
+    // console.log(userListings, "this is the user listing state");
 
     const dispatch = useDispatch(); 
 
@@ -66,7 +66,7 @@ const Profile = () => {
     const handleChange = (e)=> {
         setFormData({...formData, [e.target.id]: e.target.value})
     }
-    console.log(formData, "this is form data from handle change");
+    // console.log(formData, "this is form data from handle change");
 
     // console.log(currentUser);
 
@@ -153,9 +153,28 @@ const Profile = () => {
 
         } catch (error) {
             setShowListingError(true)
-
         }
+    }
 
+    // handle listing delete function 
+    const handleListingDelete = async (listingId) => {
+        try{
+            const response = await axios({
+                method: "DELETE",
+                url: `/server/listing/delete/${listingId}`
+            })
+            const data = await response.data;
+            if(data.success === false) {
+                console.log(data.message);
+                return;
+            }
+            setUsersListings((prev) => 
+            prev.filter((listing) => 
+            listing._id !== listingId));
+
+        } catch(err) {
+            console.log("Problem deleting the listing profile line 176");
+        }
     }
 
 
@@ -236,8 +255,13 @@ const Profile = () => {
                         <p className='text-slate-800 font-semibold flex-1 hover:uppercase truncate'>{listing.name}</p>
                     </Link>
                     <div className='flex gap-3'>
-                        <button className='text-red-400 border rounded-lg p-3 cursor-pointer hover:shadow-lg uppercase'>Delete</button>
-                        <button className='text-green-300 border rounded-lg p-3 cursor-pointer hover:shadow-lg uppercase'>Edit</button>
+                        <button onClick={()=> handleListingDelete(listing._id)}
+                        className='text-red-400 border rounded-lg p-3 cursor-pointer hover:shadow-lg uppercase'>Delete</button>
+
+                        <Link to={`/update-listing/${listing._id}`}>
+                            <button className='text-green-300 border rounded-lg p-3 cursor-pointer hover:shadow-lg uppercase'>Edit</button>
+                        </Link>
+
                     </div>
 
 

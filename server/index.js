@@ -134,6 +134,24 @@ app.post("/update/:id", verifyToken, async(req, res, next) => {
 
 })
 
+// Getting the information for update page
+app.get("/getListing/:id", async(req, res, next) => {
+
+    try {
+        const listing = await Listing.findById(req.params.id)
+        if(!listing){
+            return res.status(404).json("nothing to show")
+        }
+        res.status(201).send(listing)
+
+    } catch(error) {
+        res.status(404).send("Error getting the information");
+        next(error)
+    }
+
+
+})
+
 // delete route
 app.delete("/delete/:id", verifyToken, async(req, res) => {
     if(req.user.id !== req.params.id) return res.status(401).json("Your not allowed to delete this account")
@@ -164,7 +182,6 @@ app.post('/listing/create', verifyToken, async (req, res) => {
     
 })
 
-
 // Get Listings of Each User
 app.get('/listing/:id', verifyToken, async (req, res)=> {
     if(req.user.id === req.params.id) {
@@ -185,7 +202,49 @@ app.get('/listing/:id', verifyToken, async (req, res)=> {
 
 })
 
+app.delete("/listing/delete/:id", verifyToken, async(req, res) => {
 
+    // check to see if this user has any listing
+    const listing = await Listing.findById(req.params.id)
+    if(!listing){
+        return res.status(404).json("nothing to delete")
+    }
+
+    if(req.user.id !== listing.userRef) {  //might need to add .toString() after the userRef to convert it ot String
+        return res.status(401).json("Your not allowed to delete this listing")
+    }
+
+    try{
+        await Listing.findByIdAndDelete(req.params.id);
+        res.status(200).json({message: "Listing was deleted...."})
+    } catch {
+        console.log("Error");
+    }
+})
+
+
+
+// Update Listing
+app.post('/listing/update/:id', verifyToken, async (req, res, next) => {
+    const listing = await Listing.findById(req.params.id)
+    if(!listing){
+        return res.status(404).json("nothing to edit")
+    }
+
+    if(req.user.id !== listing.userRef) {  //might need to add .toString() after the userRef to convert it ot String
+        return res.status(401).json("Your can only update your own listing")
+    }
+
+    try {
+        const updatedListing = await Listing.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        res.status(200).json(updatedListing)
+
+    } catch (error){
+        console.log("error updating listing");
+        next(error)
+    }
+
+})
 
 
 
