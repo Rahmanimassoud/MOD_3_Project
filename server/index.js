@@ -18,6 +18,14 @@ const app = express();
 // START MIDDLEWARE====================
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, '/client/dist')))
+
+app.use((req,res,next)=>{
+    if (req.path.startsWith('/server')) {
+        req.url = req.url.replace('/server', ''); // strip /server from the path
+    }
+    next();
+});
 // ================================== USER ROUTES===================================
 // Sign In Route
 app.post('/signIn', async (req, res) => {
@@ -184,12 +192,11 @@ app.get('/listing/:id', verifyToken, async (req, res)=> {
             // console.log(Listings, "this is listings from index.js");
 
         } catch (err){
-            // next(err) //might need to change just to send the error not use next
             res.status(404).send("Error Listing " + err.message)
         }
 
     } else {
-        return res.status(401).json("You can only view your own listing") //if didnt worked remove the next like the delete function
+        return res.status(401).json("You can only view your own listing")
 
     }
 
@@ -203,7 +210,7 @@ app.delete("/listing/delete/:id", verifyToken, async(req, res) => {
         return res.status(404).json("nothing to delete")
     }
 
-    if(req.user.id !== listing.userRef) {  //might need to add .toString() after the userRef to convert it ot String
+    if(req.user.id !== listing.userRef) { 
         return res.status(401).json("Your not allowed to delete this listing")
     }
 
@@ -224,7 +231,7 @@ app.post('/listing/update/:id', verifyToken, async (req, res, next) => {
         return res.status(404).json("nothing to edit")
     }
 
-    if(req.user.id !== listing.userRef) {  //might need to add .toString() after the userRef to convert it ot String
+    if(req.user.id !== listing.userRef) { 
         return res.status(401).json("Your can only update your own listing")
     }
 
@@ -236,14 +243,8 @@ app.post('/listing/update/:id', verifyToken, async (req, res, next) => {
         console.log("error updating listing");
         next(error)
     }
-
 })
 
-
-
-
-
-app.use(express.static(path.join(__dirname, '/client/dist')))
 
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
