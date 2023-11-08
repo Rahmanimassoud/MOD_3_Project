@@ -8,23 +8,16 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const verifyToken = require('./verifyUser');
 const Listing = require('./models/listing.model');
-
+const path = require('path');
 const PORT = 3000
+
+// const __dirname = path.resolve();
 const app = express();
 
 
 // START MIDDLEWARE====================
 app.use(express.json());
 app.use(cookieParser());
-
-// app.use(cors({
-//     origin: '*'
-// }));
-
-// app.use(morgan('dev'))
-// app.use(helmet());
-// END MIDDLEWARE ===================
-
 // ================================== USER ROUTES===================================
 // Sign In Route
 app.post('/signIn', async (req, res) => {
@@ -250,7 +243,11 @@ app.post('/listing/update/:id', verifyToken, async (req, res, next) => {
 
 
 
+app.use(express.static(path.join(__dirname, '/client/dist')))
 
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    });
 
 app.listen(PORT, ()=> {
     console.log(`Server is up and running on port ${PORT}`);
