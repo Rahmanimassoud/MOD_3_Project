@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const verifyToken = require('./verifyUser');
 const Listing = require('./models/listing.model');
+const cors = require('cors')
 const path = require('path');
 const PORT = 3000
 
@@ -16,6 +17,10 @@ const app = express();
 
 
 // START MIDDLEWARE====================
+app.use(cors({
+    origin: '*'
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/client/dist')))
@@ -26,6 +31,7 @@ app.use((req,res,next)=>{
     }
     next();
 });
+// app.use(express.static(__dirname, '/client/dist'));  //added this
 // ================================== USER ROUTES===================================
 // Sign In Route
 app.post('/signIn', async (req, res) => {
