@@ -248,7 +248,7 @@ const Profile = () => {
                 {userListings.map((listing) => <div key={listing._id} className='flex justify-between border rounded-md p-3 items-center gap-2'>
                     <Link to={`/listing/${listing._id}`}>
                         {/* this is not displaying the image it shows the array empty */}
-                        <img src={listing.imageUrl} alt="cover" className='h-16 w-18 object-contain rounded-lg'/>
+                        <img src={listing.imageUrls} alt="cover" className='h-16 w-18 object-contain rounded-lg'/>
                     </Link>
 
                     <Link  to={`/listing/${listing._id}`}>
@@ -268,13 +268,6 @@ const Profile = () => {
                 </div>)}
 
             </div>}
-
-
-
-
-
-
-
         </div>
     )
 };

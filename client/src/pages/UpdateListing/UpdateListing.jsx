@@ -17,7 +17,7 @@ const UpdateListing = () => {
     // console.log(files);
 
     const [formData, setFormData] = useState({
-        imageUrl: [],
+        imageUrls: [],
         name: "",
         description: "",
         address: "",
@@ -39,41 +39,6 @@ const UpdateListing = () => {
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    // useEffect(()=> {
-    //     const fetchListing = async () => {
-    //         const listingId = params.listingId;
-    //         // console.log(listingId);
-    //         const res = await axios.get(`/server/getListing/${listingId}`);
-    //         const data = await res.data;
-    //         console.log(data, "use effect data");
-            
-    //         // if(data.success === false) {
-    //         //     console.log(data.message);
-    //         //     return;
-    //         // }
-    //         if (data && data.success !== false) {
-    //             setFormData({
-    //                 address: data.address || "",
-    //                 bathrooms: data.bathrooms || 1,
-    //                 bedrooms: data.bedrooms || 1,
-    //                 description: data.description || "",
-    //                 discountPrice: data.discountPrice || 0,
-    //                 furnished: data.furnished || false,
-    //                 imageUrl: data.imageUrl || [],
-    //                 name: data.name || "",
-    //                 offer: data.offer || false,
-    //                 petsAllowed: data.petsAllowed || false,
-    //                 regularPrice: data.regularPrice || 0,
-    //                 type: data.type || "rent",
-    //                 updatedAt: data.updatedAt || "",
-    //                 userRef: data.userRef || ""
-    //             });
-    //             console.log(formData);
-    //         }
-    //     fetchListing();
-
-    // }, [])
-
     useEffect(() => {
         const fetchListing = async () => {
             const listingId = params.listingId;
@@ -89,7 +54,7 @@ const UpdateListing = () => {
                     description: data.description || "",
                     discountPrice: data.discountPrice || 0,
                     furnished: data.furnished || false,
-                    imageUrl: data.imageUrl || [],
+                    imageUrls: data.imageUrls || [],
                     name: data.name || "",
                     offer: data.offer || false,
                     petsAllowed: data.petsAllowed || false,
@@ -110,7 +75,7 @@ const UpdateListing = () => {
         e.preventDefault();
 
         // make sure there is a image to submit
-        if(files.length > 0 && files.length + formData.imageUrl.length < 7) {
+        if(files.length > 0 && files.length + formData.imageUrls.length < 7) {
             setUploading(true)
             setImageUploadError(false)
             const promises = [];
@@ -122,7 +87,7 @@ const UpdateListing = () => {
             Promise.all(promises).then((urls)=> {
                 setFormData({
                     ...formData,
-                    imageUrl: formData.imageUrl.concat(urls),
+                    imageUrls: formData.imageUrls.concat(urls),
                 });
                 setImageUploadError(false)
                 setUploading(false)
@@ -165,7 +130,7 @@ const UpdateListing = () => {
     const DeleteImage = (idx) => {
         setFormData({
             ...formData,
-            imageUrl: formData.imageUrl.filter((_, i) => i !== idx)
+            imageUrls: formData.imageUrls.filter((_, i) => i !== idx)  //original version imageUrl: formData.imageUrls.filter((_, i) => i !== idx) 
         })
     }
 
@@ -194,7 +159,7 @@ const UpdateListing = () => {
         e.preventDefault()
 
         try{
-            if(formData.imageUrl.length < 1) return setError("must at least upload one image")
+            if(formData.imageUrls.length < 1) return setError("must at least upload one image")
             if(+formData.regularPrice < +formData.discountPrice) return setError("Discount price must be less than regular price")
             setLoading(true);
             setError(false)
@@ -373,7 +338,7 @@ const UpdateListing = () => {
                     </div>
                         <p className="text-red-700 text-sm">{imageUploadError && imageUploadError}</p>
                         {
-                            formData.imageUrl.length > 0 && formData.imageUrl.map((url, idx)=> (
+                            formData.imageUrls.length > 0 && formData.imageUrls.map((url, idx)=> (
                                 <div key={url} className="flex justify-between p-2 border items-center">
                                 <img src={url} alt="listing image" className="w-20 h-20 object-contain rounded-lg" />
                                 <button onClick={()=> DeleteImage(idx)} type="button"

@@ -14,7 +14,7 @@ const CreateListing = () => {
     console.log(files);
 
     const [formData, setFormData] = useState({
-        imageUrl: [],
+        imageUrls: [],
         name: "",
         description: "",
         address: "",
@@ -41,7 +41,7 @@ const CreateListing = () => {
         e.preventDefault();
 
         // make sure there is a image to submit
-        if(files.length > 0 && files.length + formData.imageUrl.length < 7) {
+        if(files.length > 0 && files.length + formData.imageUrls.length < 7) {
             setUploading(true)
             setImageUploadError(false)
             const promises = [];
@@ -51,7 +51,7 @@ const CreateListing = () => {
             Promise.all(promises).then((urls)=> {
                 setFormData({
                     ...formData,
-                    imageUrl: formData.imageUrl.concat(urls),
+                    imageUrls: formData.imageUrls.concat(urls),
                 });
                 setImageUploadError(false)
                 setUploading(false)
@@ -94,7 +94,7 @@ const CreateListing = () => {
     const DeleteImage = (idx) => {
         setFormData({
             ...formData,
-            imageUrl: formData.imageUrl.filter((_, i) => i !== idx)
+            imageUrls: formData.imageUrls.filter((_, i) => i !== idx)
         })
     }
 
@@ -123,7 +123,7 @@ const CreateListing = () => {
         e.preventDefault()
 
         try{
-            if(formData.imageUrl.length < 1) return setError("must at least upload one image")
+            if(formData.imageUrls.length < 1) return setError("must at least upload one image")
             if(+formData.regularPrice < +formData.discountPrice) return setError("Discount price must be less than regular price")
             setLoading(true);
             setError(false)
@@ -301,7 +301,7 @@ const CreateListing = () => {
                     </div>
                         <p className="text-red-700 text-sm">{imageUploadError && imageUploadError}</p>
                         {
-                            formData.imageUrl.length > 0 && formData.imageUrl.map((url, idx)=> (
+                            formData.imageUrls.length > 0 && formData.imageUrls.map((url, idx)=> (
                                 <div key={url} className="flex justify-between p-2 border items-center">
                                 <img src={url} alt="listing image" className="w-20 h-20 object-contain rounded-lg" />
                                 <button onClick={()=> DeleteImage(idx)} type="button"

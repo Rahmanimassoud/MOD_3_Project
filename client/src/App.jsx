@@ -9,6 +9,7 @@ import Profile from './pages/Profile/Profile';
 import Private from './components/Private/Private';
 import CreateListing from './pages/CreateListing/CreateListing';
 import UpdateListing from './pages/UpdateListing/UpdateListing';
+import Listings from './pages/Listings/Listings';
 
 
 
@@ -22,6 +23,8 @@ const App = () => {
             <Route path='/signIn' element={<SignIn/>}/>
             <Route path='/signUp' element={<SignUp/>}/>
             <Route path='/about' element={<About/>}/>
+            <Route path='/listing/:listingId' element={<Listings/>}/>
+
 
             <Route element={<Private/>}>
                 <Route path='/profile' element={<Profile/>}/>
