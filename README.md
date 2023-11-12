@@ -63,4 +63,4 @@ Contributing
 Contributions are welcome! If you'd like to contribute to this project, please follow these guidelines:
 
 ## Visit the website in the following address: 
-[https://crypto-rover.onrender.com/](https://mod3project-y3ol.onrender.com)https://mod3project-y3ol.onrender.com
+https://mod3project-y3ol.onrender.com
